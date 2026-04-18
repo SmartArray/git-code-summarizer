@@ -1,0 +1,76 @@
+{
+  "name": "summarize-file",
+  "displayName": "Summarize File",
+  "description": "Run tools/summarizer/summarize-file.py for the active file and open the Markdown result.",
+  "version": "0.0.1",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:summarizeFile.requestSummary",
+    "onCommand:summarizeFile.requestSummaryRefresh",
+    "onCommand:summarizeFile.showPromptOnly"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "summarizeFile.requestSummary",
+        "title": "Summarize File: Request Summary"
+      },
+      {
+        "command": "summarizeFile.requestSummaryRefresh",
+        "title": "Summarize File: Request Summary (Refresh Cache)"
+      },
+      {
+        "command": "summarizeFile.showPromptOnly",
+        "title": "Summarize File: Show Prompt Only"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "summarizeFile.requestSummary",
+        "key": "cmd+alt+s",
+        "mac": "cmd+alt+s",
+        "when": "editorTextFocus"
+      }
+    ],
+    "configuration": {
+      "title": "Summarize File",
+      "properties": {
+        "summarizeFile.scriptPath": {
+          "type": "string",
+          "default": "",
+          "description": "Absolute path to summarize-file.py. If empty, the extension looks for tools/summarize-file.py under the current workspace."
+        },
+        "summarizeFile.pythonExecutable": {
+          "type": "string",
+          "default": "python3",
+          "description": "Python executable used to run summarize-file.py."
+        },
+        "summarizeFile.extraArgs": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "description": "Extra command-line arguments passed to summarize-file.py."
+        },
+        "summarizeFile.env": {
+          "type": "object",
+          "default": {},
+          "description": "Extra environment variables passed to summarize-file.py."
+        },
+        "summarizeFile.showPreview": {
+          "type": "boolean",
+          "default": true,
+          "description": "Open the generated Markdown in VS Code's Markdown preview."
+        }
+      }
+    }
+  }
+}
