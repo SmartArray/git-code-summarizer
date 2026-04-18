@@ -24,6 +24,7 @@ DEFAULT_OPENAI_MODEL = "llama3.1"
 DEFAULT_MS_TENANT = "organizations"
 DEFAULT_MS_GRAPH_BASE_URL = "https://graph.microsoft.com/beta"
 DEFAULT_CACHE_VERSION = 1
+DEFAULT_MODE = "request"
 DEFAULT_SYSTEM_MESSAGE = (
     "You are a careful software engineer. Explain the file in concise, clear "
     "language and base the recent-change summary on the provided git history."
@@ -111,6 +112,12 @@ def load_effective_config(explicit_config_path: Optional[str]) -> Dict[str, Any]
 def apply_config_defaults(args: argparse.Namespace, config: Dict[str, Any]) -> argparse.Namespace:
     if getattr(args, "prompt_only", False):
         args.mode = "prompt"
+    elif args.mode is None:
+        mode = config.get("mode")
+        if isinstance(mode, str) and mode in {"prompt", "request"}:
+            args.mode = mode
+        else:
+            args.mode = DEFAULT_MODE
 
     if args.provider is None:
         provider = config.get("provider")
@@ -181,7 +188,7 @@ def parse_args() -> argparse.Namespace:
         "--config",
         help=(
             "Path to the JSON config file. If omitted, the script loads the profile "
-            "config and lets summarize-file.json in the current working directory override it."
+            "config and lets summarizer.json in the current working directory override it."
         ),
     )
     parser.add_argument(
@@ -194,7 +201,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--mode",
         choices=("prompt", "request"),
-        default="prompt",
+        default=None,
         help="Print the generated prompt, or send it to a provider",
     )
     parser.add_argument(
