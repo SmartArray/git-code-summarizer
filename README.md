@@ -30,6 +30,19 @@ It supports:
 - remote OpenAI-compatible providers
 - Microsoft 365 Copilot
 
+## Table Of Contents
+
+- [What Is In This Folder](#what-is-in-this-folder)
+- [What The Script Does](#what-the-script-does)
+- [Install](#install)
+- [Quick Start](#quick-start)
+- [Example With Ollama](#example-with-ollama)
+- [Config Order](#config-order)
+- [Cache](#cache)
+- [Sublime Text Setup](#sublime-text-setup)
+- [VS Code Setup](#vs-code-setup)
+- [Notes](#notes)
+
 ## What Is In This Folder
 
 - `summarize-file.py`
