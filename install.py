@@ -462,14 +462,16 @@ def collect_answers() -> Dict[str, object]:
             if not prompt_yes_no("Continue anyway?", True):
                 raise SystemExit(1)
 
-    install_path = Path(prompt_text("Where should the repo be installed?", str(default_install_dir()))).expanduser()
+    install_path = Path(
+        prompt_text("Where should the repo be installed?", str(default_install_dir()))
+    ).expanduser().resolve()
     profile_config_path = default_profile_config_path()
     install_cli = prompt_yes_no("Install command-line launchers for gcs and gcs-cache-glob?", True)
     launcher_dir = None
     if install_cli:
         launcher_dir = Path(
             prompt_text("Launcher directory:", str(default_launcher_dir()))
-        ).expanduser()
+        ).expanduser().resolve()
     install_vscode = prompt_yes_no("Install the VS Code extension and configure it?", True)
     install_sublime = prompt_yes_no("Install the Sublime Text plugin and configure it?", False)
 
