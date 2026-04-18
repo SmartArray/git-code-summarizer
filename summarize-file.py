@@ -140,6 +140,11 @@ def apply_config_defaults(args: argparse.Namespace, config: Dict[str, Any]) -> a
         else:
             args.base_url = DEFAULT_OPENAI_BASE_URL
 
+    if args.api_key is None:
+        api_key = config.get("api_key")
+        if isinstance(api_key, str):
+            args.api_key = api_key
+
     if args.api_key_env is None:
         api_key_env = config.get("api_key_env")
         if isinstance(api_key_env, str):

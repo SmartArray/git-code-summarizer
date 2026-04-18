@@ -51,6 +51,8 @@ It supports:
 
 - `summarize-file.py`
   The main Python script.
+- `install.py`
+  Interactive installer for the CLI, config, and editor integrations.
 - `gcs-cache-glob.py`
   Batch helper that warms the response cache for files matched from the current directory.
 - `summarizer.example.json`
@@ -81,6 +83,12 @@ The cache is invalidated automatically when:
 - the model or provider changes
 
 ## Install
+
+Fast path:
+
+```bash
+python3 install.py
+```
 
 ### 1. Clone To A Persistent Path
 
