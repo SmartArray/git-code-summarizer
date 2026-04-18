@@ -102,19 +102,19 @@ Example:
 Prompt only:
 
 ```bash
-python3 tools/summarizer/summarize-file.py path/to/file.cpp --prompt-only
+python3 summarize-file.py path/to/file.cpp --prompt-only
 ```
 
 Request a summary:
 
 ```bash
-python3 tools/summarizer/summarize-file.py path/to/file.cpp --mode request
+python3 summarize-file.py path/to/file.cpp --mode request
 ```
 
 Force recomputation:
 
 ```bash
-python3 tools/summarizer/summarize-file.py path/to/file.cpp --mode request --refresh
+python3 summarize-file.py path/to/file.cpp --mode request --refresh
 ```
 
 ## Example With Ollama
@@ -138,7 +138,7 @@ Example config:
 Then run:
 
 ```bash
-python3 tools/summarizer/summarize-file.py asu/lib/Components/src/BrewUnit/BrewUnit.cpp --mode request
+python3 summarize-file.py asu/lib/Components/src/BrewUnit/BrewUnit.cpp --mode request
 ```
 
 ## Config Order
@@ -177,7 +177,7 @@ Useful flags:
 Copy everything from:
 
 ```text
-tools/summarizer/sublime-text/SummarizeFile/
+sublime-text/SummarizeFile/
 ```
 
 to:
@@ -220,7 +220,7 @@ The plugin opens a temp Markdown file, overwrites it on rerun, and deletes it wh
 Open:
 
 ```text
-tools/summarizer/vscode/summarize-file-extension/
+vscode/summarize-file-extension/
 ```
 
 in VS Code.
