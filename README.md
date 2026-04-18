@@ -1,6 +1,27 @@
-# Summarizer
+# GitCodeSummarizer
 
-This tool explains what a file does.
+> "Large codebases do not fail because code is missing. They fail because context is missing."
+
+GitCodeSummarizer, or `gcs`, helps you recover that context fast.
+
+In a modern codebase with hundreds of source files and hundreds of colleagues, the real problem is rarely "what does this file contain?" The real problem is:
+
+- why this file exists
+- what responsibility it owns
+- what changed recently
+- what those changes were trying to achieve
+
+Reading a file in isolation is usually not enough. Reading the file together with its recent git history is much better. That is what this tool does.
+
+`gcs` reads the current source file, its path inside the repository, and the recent commits that touched it. It then builds a focused prompt and asks an LLM to explain the file in Markdown. The result is much closer to how engineers actually reason about code: current implementation plus recent intent.
+
+This is especially useful when:
+
+- onboarding into a large project
+- reviewing unfamiliar modules
+- preparing refactors
+- understanding ownership boundaries
+- recovering intent from terse commit messages
 
 It supports:
 
@@ -8,16 +29,6 @@ It supports:
   for example Ollama on your own machine
 - remote OpenAI-compatible providers
 - Microsoft 365 Copilot
-
-It reads:
-
-- the current file contents
-- the file path relative to the git repo
-- the recent git commits for that file
-
-It then builds a prompt for an LLM.
-
-It can also send that prompt to an LLM and return a Markdown summary.
 
 ## What Is In This Folder
 
@@ -50,9 +61,58 @@ The cache is invalidated automatically when:
 - the prompt changes
 - the model or provider changes
 
+## Install
+
+### 1. Clone To A Persistent Path
+
+Pick a stable location that will not move around.
+
+macOS / Linux example:
+
+```bash
+mkdir -p ~/opt
+git clone <repo-url> ~/opt/git-code-summarizer
+```
+
+Windows PowerShell example:
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\opt" | Out-Null
+git clone <repo-url> "$HOME\opt\git-code-summarizer"
+```
+
+### 2. Add A `gcs` Command
+
+macOS / Linux symlink:
+
+```bash
+mkdir -p ~/.local/bin
+ln -sf ~/opt/git-code-summarizer/summarize-file.py ~/.local/bin/gcs
+chmod +x ~/opt/git-code-summarizer/summarize-file.py
+```
+
+Make sure `~/.local/bin` is in your `PATH`.
+
+Windows equivalent:
+
+Create a `gcs.cmd` file somewhere in your `PATH`, for example in `%USERPROFILE%\bin\gcs.cmd`:
+
+```bat
+@echo off
+python "%USERPROFILE%\opt\git-code-summarizer\summarize-file.py" %*
+```
+
+If `%USERPROFILE%\bin` does not exist yet:
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\bin" | Out-Null
+```
+
+Then add that directory to your `PATH`.
+
 ## Quick Start
 
-### 1. Create a Profile Config
+### 1. Create A Profile Config
 
 On macOS or Linux, create:
 
@@ -60,7 +120,13 @@ On macOS or Linux, create:
 ~/.config/summarizer/config.json
 ```
 
-Example:
+Create the directory first:
+
+```bash
+mkdir -p ~/.config/summarizer
+```
+
+Then create the config file:
 
 ```json
 {
@@ -77,6 +143,18 @@ On Windows, use:
 ```text
 %APPDATA%\summarizer\config.json
 ```
+
+Create the directory first:
+
+```powershell
+New-Item -ItemType Directory -Force "$env:APPDATA\summarizer" | Out-Null
+```
+
+Then create the same `config.json` there.
+
+`OPENAI_API_KEY` is only needed for cloud LLM providers.
+
+It is not required for local models such as Ollama when your local endpoint does not require authentication.
 
 ### 2. Optional: Create A Repo-Local Override
 
@@ -102,19 +180,25 @@ Example:
 Prompt only:
 
 ```bash
-python3 summarize-file.py path/to/file.cpp --prompt-only
+gcs path/to/file.cpp --prompt-only
 ```
 
 Request a summary:
 
 ```bash
-python3 summarize-file.py path/to/file.cpp --mode request
+gcs path/to/file.cpp --mode request
 ```
 
 Force recomputation:
 
 ```bash
-python3 summarize-file.py path/to/file.cpp --mode request --refresh
+gcs path/to/file.cpp --mode request --refresh
+```
+
+You can also run it directly:
+
+```bash
+python3 summarize-file.py path/to/file.cpp --mode request
 ```
 
 ## Example With Ollama
@@ -138,7 +222,7 @@ Example config:
 Then run:
 
 ```bash
-python3 summarize-file.py asu/lib/Components/src/BrewUnit/BrewUnit.cpp --mode request
+gcs path/to/file.cpp --mode request
 ```
 
 ## Config Order
@@ -192,7 +276,7 @@ Set:
 
 ```json
 {
-  "script_path": "/absolute/path/to/summarizer/summarize-file.py",
+  "script_path": "/absolute/path/to/git-code-summarizer/summarize-file.py",
   "python_executable": "python3",
   "extra_args": [],
   "env": {}
@@ -246,7 +330,7 @@ Use VS Code settings:
 Typical script path:
 
 ```text
-/absolute/path/to/summarizer/summarize-file.py
+/absolute/path/to/git-code-summarizer/summarize-file.py
 ```
 
 ### 4. Use It
