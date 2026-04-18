@@ -2,6 +2,13 @@
 
 This tool explains what a file does.
 
+It supports:
+
+- local LLMs through an OpenAI-compatible endpoint
+  for example Ollama on your own machine
+- remote OpenAI-compatible providers
+- Microsoft 365 Copilot
+
 It reads:
 
 - the current file contents
