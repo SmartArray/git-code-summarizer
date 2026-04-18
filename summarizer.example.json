@@ -1,0 +1,7 @@
+{
+  "provider": "openai-compatible",
+  "model": "llama3.1",
+  "base_url": "http://localhost:11434/v1",
+  "api_key_env": "OPENAI_API_KEY",
+  "system_message": "You are a careful software engineer. Explain the file in concise, clear language and base the recent-change summary on the provided git history."
+}
