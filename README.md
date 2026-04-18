@@ -1,3 +1,5 @@
+![GitCodeSummarizer Logo](docs/gcs.png)
+
 # GitCodeSummarizer
 
 > "Large codebases do not fail because code is missing. They fail because context is missing."
