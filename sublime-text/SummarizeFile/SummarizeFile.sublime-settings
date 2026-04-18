@@ -1,0 +1,6 @@
+{
+  "script_path": "/absolute/path/to/summarizer/summarize-file.py",
+  "python_executable": "python3",
+  "extra_args": [],
+  "env": {}
+}

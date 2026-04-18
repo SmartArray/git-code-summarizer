@@ -1,0 +1,17 @@
+[
+  {
+    "caption": "Summarize File: Request Summary",
+    "command": "summarize_file",
+    "args": {"mode": "request"}
+  },
+  {
+    "caption": "Summarize File: Request Summary (Refresh Cache)",
+    "command": "summarize_file",
+    "args": {"mode": "request", "refresh": true}
+  },
+  {
+    "caption": "Summarize File: Show Prompt Only",
+    "command": "summarize_file",
+    "args": {"mode": "prompt"}
+  }
+]
