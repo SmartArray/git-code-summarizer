@@ -84,14 +84,14 @@ macOS / Linux example:
 
 ```bash
 mkdir -p ~/opt
-git clone <repo-url> ~/opt/git-code-summarizer
+git clone https://github.com/SmartArray/git-code-summarizer.git ~/opt/git-code-summarizer
 ```
 
 Windows PowerShell example:
 
 ```powershell
 New-Item -ItemType Directory -Force "$HOME\opt" | Out-Null
-git clone <repo-url> "$HOME\opt\git-code-summarizer"
+git clone https://github.com/SmartArray/git-code-summarizer.git "$HOME\opt\git-code-summarizer"
 ```
 
 ### 2. Add A `gcs` Command
