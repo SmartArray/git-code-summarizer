@@ -37,6 +37,7 @@ It supports:
 - [Install](#install)
 - [Quick Start](#quick-start)
 - [Example With Ollama](#example-with-ollama)
+- [CLI Arguments](#cli-arguments)
 - [Config Order](#config-order)
 - [Cache](#cache)
 - [Sublime Text Setup](#sublime-text-setup)
@@ -237,6 +238,54 @@ Then run:
 ```bash
 gcs path/to/file.cpp --mode request
 ```
+
+## CLI Arguments
+
+The command format is:
+
+```text
+gcs <filepath> [options]
+```
+
+Most request-mode settings can also come from config. In the table below, the default value is the effective default after config is applied.
+
+| Argument | Values | Default | Notes |
+| --- | --- | --- | --- |
+| `filepath` | Path to a file inside the current git repo | Required | Must point to a regular file inside the repository. |
+| `--config <path>` | Path to a JSON config file | Not set | If omitted, `gcs` loads profile config and then `summarizer.json` in the current working directory. |
+| `-n`, `--num-commits <int>` | Integer greater than `0` | `10` | Number of recent commits to inspect for the target file. |
+| `--mode <mode>` | `prompt`, `request` | `request` | `prompt` prints only the generated prompt. `request` calls the configured provider. |
+| `--prompt-only` | Flag | `false` | Shortcut for `--mode prompt`. |
+| `--provider <provider>` | `openai-compatible`, `m365-copilot` | `openai-compatible` | Provider used in request mode. |
+| `--print-prompt` | Flag | `false` | In request mode, prints the prompt before the model response. |
+| `--timeout <seconds>` | Positive number | `120.0` | HTTP timeout for provider requests. |
+| `--cache-dir <path>` | Directory path | OS-specific persistent user cache | Overrides the default response cache directory. Default: macOS/Linux `~/.cache/gcs/responses/`, Windows `%LOCALAPPDATA%\gcs\responses\`. |
+| `--no-cache` | Flag | `false` | Disables cache reads and writes. |
+| `--refresh` | Flag | `false` | Ignores any cached response and recomputes it. |
+| `--base-url <url>` | URL | Config value or `http://localhost:11434/v1` | Base URL for the OpenAI-compatible provider. |
+| `--model <name>` | Any model name string | Config value or `llama3.1` | Model used in request mode. |
+| `--api-key <key>` | Any string | Not set | Direct API key for the OpenAI-compatible provider. |
+| `--api-key-env <envvar>` | Environment variable name | Config value or `OPENAI_API_KEY` | Environment variable used to read the API key. |
+| `--system-message <text>` | Any string | Config value or built-in system prompt | System message for the OpenAI-compatible provider. |
+| `--ms-client-id <id>` | Microsoft Entra application client ID | Not set | Required for Microsoft device-code auth when using `m365-copilot`. |
+| `--ms-tenant <tenant>` | Tenant string such as `organizations`, `common`, `consumers`, or a tenant ID | Config value or `organizations` | Tenant used for Microsoft device-code auth. |
+| `--ms-graph-base-url <url>` | URL | Config value or `https://graph.microsoft.com/beta` | Base URL for Microsoft Graph Copilot APIs. |
+| `--ms-scope <scope>` | OAuth scope string; repeat the flag to add more | Config value or built-in Copilot scope set | Adds Microsoft Graph OAuth scopes. If omitted, `gcs` uses the default Copilot Chat scopes. |
+| `--ms-token-cache <path>` | File path | OS-specific user cache path | Overrides the Microsoft token cache file path. |
+| `--ms-clear-cache` | Flag | `false` | Deletes the cached Microsoft token before authenticating. |
+
+Default Microsoft scopes used when `--ms-scope` is not provided:
+
+- `offline_access`
+- `openid`
+- `profile`
+- `https://graph.microsoft.com/Sites.Read.All`
+- `https://graph.microsoft.com/Mail.Read`
+- `https://graph.microsoft.com/People.Read.All`
+- `https://graph.microsoft.com/OnlineMeetingTranscript.Read.All`
+- `https://graph.microsoft.com/Chat.Read`
+- `https://graph.microsoft.com/ChannelMessage.Read.All`
+- `https://graph.microsoft.com/ExternalItem.Read.All`
 
 ## Config Order
 
