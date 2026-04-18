@@ -100,7 +100,7 @@ def main(argv: Sequence[str]) -> int:
         print(f"No files matched pattern: {pattern}", file=sys.stderr)
         return 1
 
-    script_path = Path(__file__).with_name("summarize-file.py")
+    script_path = Path(__file__).resolve().with_name("summarize-file.py")
     python_executable = sys.executable or "python3"
 
     failures: List[Tuple[Path, int, str]] = []
