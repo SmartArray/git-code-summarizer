@@ -146,7 +146,7 @@ def default_launcher_dir() -> Path:
             if candidate.exists():
                 return candidate
         return Path.home() / "bin"
-    return Path("/usr/local/bin")
+    return Path.home() / ".local" / "bin"
 
 
 def read_json_file(path: Path) -> Dict[str, object]:
