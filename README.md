@@ -250,13 +250,14 @@ If both profile config and `summarizer.json` exist, the current working director
 
 ## Cache
 
-The response cache is stored in:
+The response cache is now a user-level persistent cache. By default it is stored outside the repo in:
 
 ```text
-.tools-cache/summarize-file/
+macOS/Linux: ~/.cache/gcs/responses/
+Windows: %LOCALAPPDATA%\gcs\responses\
 ```
 
-inside the repo by default.
+`gcs` uses that cache across repositories and across reboots. The cache key logic is unchanged, so entries are still based on file content plus git commit state.
 
 Useful flags:
 
@@ -265,7 +266,7 @@ Useful flags:
 - `--no-cache`
   Do not read or write cache entries.
 - `--cache-dir <path>`
-  Use a different cache directory.
+  Override the default response cache directory.
 
 ## Sublime Text Setup
 

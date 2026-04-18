@@ -481,10 +481,19 @@ def get_ms_token_cache_path(explicit_path: Optional[str]) -> Path:
     return default_cache_dir() / "ms365-token.json"
 
 
-def get_response_cache_dir(explicit_path: Optional[str], repo_root: Path) -> Path:
+def get_response_cache_dir(explicit_path: Optional[str]) -> Path:
     if explicit_path:
         return Path(explicit_path).expanduser()
-    return repo_root / ".tools-cache" / "summarize-file"
+    if os.name == "nt":
+        base = os.environ.get("LOCALAPPDATA") or os.environ.get("APPDATA")
+        if base:
+            return Path(base) / "gcs" / "responses"
+        return Path.home() / "AppData" / "Local" / "gcs" / "responses"
+
+    base = os.environ.get("XDG_CACHE_HOME")
+    if base:
+        return Path(base) / "gcs" / "responses"
+    return Path.home() / ".cache" / "gcs" / "responses"
 
 
 def write_json(path: Path, payload: Dict[str, Any]) -> None:
@@ -931,7 +940,7 @@ def main() -> int:
         print(prompt)
         return 0
 
-    cache_dir = get_response_cache_dir(args.cache_dir, repo_root)
+    cache_dir = get_response_cache_dir(args.cache_dir)
     cache_metadata = build_cache_metadata(
         args=args,
         relative_path=relative_path,
