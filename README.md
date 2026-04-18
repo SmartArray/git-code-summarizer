@@ -105,7 +105,6 @@ macOS / Linux symlink:
 ```bash
 mkdir -p ~/.local/bin
 ln -sf ~/opt/git-code-summarizer/summarize-file.py ~/.local/bin/gcs
-chmod +x ~/opt/git-code-summarizer/summarize-file.py
 ```
 
 Make sure `~/.local/bin` is in your `PATH`.
@@ -114,7 +113,6 @@ Optional helper command:
 
 ```bash
 ln -sf ~/opt/git-code-summarizer/gcs-cache-glob.py ~/.local/bin/gcs-cache-glob
-chmod +x ~/opt/git-code-summarizer/gcs-cache-glob.py
 ```
 
 Windows equivalent:
