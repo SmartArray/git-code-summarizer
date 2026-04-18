@@ -37,6 +37,7 @@ It supports:
 - [Install](#install)
 - [Quick Start](#quick-start)
 - [Example With Ollama](#example-with-ollama)
+- [Batch Cache Warming](#batch-cache-warming)
 - [CLI Arguments](#cli-arguments)
 - [Config Order](#config-order)
 - [Cache](#cache)
@@ -48,6 +49,8 @@ It supports:
 
 - `summarize-file.py`
   The main Python script.
+- `gcs-cache-glob.py`
+  Batch helper that warms the response cache for files matched from the current directory.
 - `summarizer.example.json`
   Example config file.
 - `sublime-text/`
@@ -107,6 +110,13 @@ chmod +x ~/opt/git-code-summarizer/summarize-file.py
 
 Make sure `~/.local/bin` is in your `PATH`.
 
+Optional helper command:
+
+```bash
+ln -sf ~/opt/git-code-summarizer/gcs-cache-glob.py ~/.local/bin/gcs-cache-glob
+chmod +x ~/opt/git-code-summarizer/gcs-cache-glob.py
+```
+
 Windows equivalent:
 
 Create a `gcs.cmd` file somewhere in your `PATH`, for example in `%USERPROFILE%\bin\gcs.cmd`:
@@ -123,6 +133,13 @@ New-Item -ItemType Directory -Force "$HOME\bin" | Out-Null
 ```
 
 Then add that directory to your `PATH`.
+
+If you also want the batch helper, create `%USERPROFILE%\bin\gcs-cache-glob.cmd`:
+
+```bat
+@echo off
+python "%USERPROFILE%\opt\git-code-summarizer\gcs-cache-glob.py" %*
+```
 
 ## Quick Start
 
@@ -238,6 +255,27 @@ Then run:
 ```bash
 gcs path/to/file.cpp --mode request
 ```
+
+## Batch Cache Warming
+
+`gcs-cache-glob` scans the current working directory with a glob pattern, then calls the repo-local `summarize-file.py` once per matched file. Child output is suppressed; the helper prints progress only.
+
+Examples:
+
+```bash
+gcs-cache-glob "*.cpp" --mode request
+gcs-cache-glob "**/*.cpp" --mode request --refresh
+gcs-cache-glob --keep-going "**/*.cpp" --mode request
+```
+
+Wrapper-specific behavior:
+
+| Argument | Values | Default | Notes |
+| --- | --- | --- | --- |
+| `<pattern>` | Any Python `glob` pattern such as `*.cpp` or `**/*.cpp` | Required | Matching starts from the current working directory. `**` works recursively. |
+| `--keep-going` | Flag | `false` | Continue processing after a file fails and report failures at the end. |
+| `--fail-fast` | Flag | `true` | Stop on the first failed file. This is the default behavior. |
+| Remaining args | Any `gcs` CLI args | Forwarded unchanged | Passed to `summarize-file.py` for each matched file. |
 
 ## CLI Arguments
 
